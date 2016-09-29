@@ -1,0 +1,41 @@
+<h3>Order your flowers</h3>
+<%= form_for @order, url: {action: 'create'} do |f| %>
+    <div class="form-group">
+      <%= f.label(:recipient_name) %>
+      <%= f.text_field :recipient_name %>
+    </div>
+
+    <% @bouquets.each do |bouquet| %>
+    <div class="radio">
+      <label>
+        <%= f.radio_button(:bouquet_id, bouquet.id) %>
+        <%= bouquet.name %> (<%= number_to_currency(bouquet.price, unit: '£') %>)
+      </label>
+    </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label(:delivery_on) %>
+      <%= f.date_field :delivery_on %>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <%= f.check_box :three_month_bundle %>
+        <span>Check box if you would like to make this a three month bundle.</span>
+      </label>
+    </div>
+
+    <div>Select your shipping</div>
+
+    <% @shipping.each do |shipping| %>
+      <div class="radio">
+        <label>
+          <%= f.radio_button(:shipping_id, shipping.id, checked: shipping.category == 'standard') %>
+          <%= shipping.category %> (<%= number_to_currency(shipping.charge, unit: '£') %>)
+        </label>
+      </div>
+    <% end %>
+
+    <%= f.submit 'Order', class: 'btn btn-default' %>
+<% end %>
